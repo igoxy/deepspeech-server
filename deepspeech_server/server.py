@@ -79,6 +79,8 @@ def deepspeech_server(aio_scheduler, sources):
     )
     config = parse_config(read_response)
 
+    print(f'read_response: {read_response}')
+
     logs_config = config.pipe(
         ops.flat_map(lambda i: rx.from_(i.log.level, scheduler=ImmediateScheduler())),
         ops.map(lambda i: logging.SetLevel(logger=i.logger, level=i.level)),
@@ -99,6 +101,7 @@ def deepspeech_server(aio_scheduler, sources):
                 scorer=getattr(i.deepspeech, 'scorer', None),
                 lm_alpha=getattr(i.deepspeech, 'lm_alpha', None),
                 lm_beta=getattr(i.deepspeech, 'lm_beta', None),
+                #TODO colocar caminho do arquivo csv no json - sai aqui
             ),
             beam_width=getattr(i.deepspeech, 'beam_width', None),
         )),

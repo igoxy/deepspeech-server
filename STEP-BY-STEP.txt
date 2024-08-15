@@ -1,0 +1,17 @@
+Instalação (ambiente virtual):
+
+>Instalar primeiro o deepspeech-server via setup.py
+
+> Instalar o sentence-transformers: pip3 install sentence-transformers
+
+> Desinstalar o torch e o torchvision instalado se for versão gpu: pip3 uninstall torch torchvision
+
+> Instalar o torch sem gpu: pip3 install torch --index-url https://download.pytorch.org/whl/cpu | pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+
+> Instalar o deepspeech: pip3 install deepspeech
+
+#TODO LOCAL DO CSV
+
+Execução:
+* Na mesma pasta com o arquivo de configuração json
+> deepspeech-server --config config.json

@@ -8,6 +8,13 @@ from cyclotron import Component
 from cyclotron_std.logging import Log
 from deepspeech import Model
 
+# Classify module
+from deepspeech_server.Classify import Classify
+
+BERTIMBAU_MODEL = 'neuralmind/bert-base-portuguese-cased'
+FILE_CSV = '/home/igoxy/Documentos/deepspeech-server/sentences.csv'
+
+sts = Classify(BERTIMBAU_MODEL, FILE_CSV)
 
 Sink = namedtuple('Sink', ['speech'])
 Source = namedtuple('Source', ['text', 'log'])

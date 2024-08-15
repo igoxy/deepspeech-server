@@ -6,3 +6,4 @@ dist
 .ropeproject
 config.json
 .vscode
+.venv
