@@ -1,3 +1,6 @@
+#TODO ADD PATH PARA O ARQUIVO CSV DE SENTENÇAS AO JSON
+#TODO CONECTAR A TRANSCRICAO COM O CLASSIFICAR E O RESULTADO
+
 import io
 import logging
 from collections import namedtuple
