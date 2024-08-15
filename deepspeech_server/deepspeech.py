@@ -15,9 +15,10 @@ from deepspeech import Model
 from deepspeech_server.Classify import Classify
 
 BERTIMBAU_MODEL = 'neuralmind/bert-base-portuguese-cased'
-FILE_CSV = '/home/igoxy/Documentos/deepspeech-server/sentences.csv'
+THRESHOLD = 0.95    # Similaridade mínima aceita entre a frase transcrita e a do classificador (correlação mínima)
+#FILE_CSV = '/home/igoxy/Documentos/deepspeech-server/sentences.csv'
 
-sts = Classify(BERTIMBAU_MODEL, FILE_CSV)
+#sts = None  # Classify
 
 Sink = namedtuple('Sink', ['speech'])
 Source = namedtuple('Source', ['text', 'log'])
@@ -26,7 +27,7 @@ Source = namedtuple('Source', ['text', 'log'])
 Scorer = namedtuple('Scorer', ['scorer', 'lm_alpha', 'lm_beta'])
 Scorer.__new__.__defaults__ = (None, None, None)
 
-Initialize = namedtuple('Initialize', ['model', 'scorer', 'beam_width'])
+Initialize = namedtuple('Initialize', ['model', 'scorer', 'beam_width', 'csv'])
 Initialize.__new__.__defaults__ = (None,)
 
 SpeechToText = namedtuple('SpeechToText', ['data', 'context'])
@@ -40,6 +41,8 @@ def make_driver(loop=None):
     def driver(sink):
         model = None
         log_observer = None
+
+        sts = None  # Classify
 
         def on_log_subscribe(observer, scheduler):
             nonlocal log_observer
@@ -70,9 +73,16 @@ def make_driver(loop=None):
             log("model is ready.")
             return model
 
+        #Inicializar o objeto para o classificador
+        def setup_classify(csv):
+            log(f'Iniciando o classificador com o modelo {BERTIMBAU_MODEL} e sentenças do arquivo {csv}')
+            return Classify(BERTIMBAU_MODEL, csv)
+
+
         def subscribe(observer, scheduler):
             def on_deepspeech_request(item):
                 nonlocal model
+                nonlocal sts
 
                 if type(item) is SpeechToText:
                     if model is not None:
@@ -84,6 +94,16 @@ def make_driver(loop=None):
                                 audio = audio[:, 0]
                             text = model.stt(audio)
                             log("STT result: {}".format(text))
+                            
+                            # -- Aplicação do classificador após o modelo deepspeech --
+                            result_sts = sts.find_more_similar(text)    # Obtém o mais similar do conjunto de frases
+                            log(f'From STS result: {result_sts[0]} \nScore: {result_sts[1]}')
+
+                            if result_sts[1] >= THRESHOLD:  # Se tiver uma alta correlação, substitui a transcrição original
+                                text = result_sts[0]
+                            
+                            # -- Aplicação do classificador após o modelo deepspeech --
+                                
                             observer.on_next(rx.just(TextResult(
                                 text=text,
                                 context=item.context,
@@ -98,6 +118,9 @@ def make_driver(loop=None):
                     log("initialize: {}".format(item))
                     model = setup_model(
                         item.model, item.scorer, item.beam_width)
+                    
+                    sts = setup_classify(item.csv) # Inicializa o objeto do classificador
+                
                 else:
                     log("unknown item: {}".format(item), level=logging.CRITICAL)
                     observer.on_error(

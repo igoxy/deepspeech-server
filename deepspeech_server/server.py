@@ -101,9 +101,9 @@ def deepspeech_server(aio_scheduler, sources):
                 scorer=getattr(i.deepspeech, 'scorer', None),
                 lm_alpha=getattr(i.deepspeech, 'lm_alpha', None),
                 lm_beta=getattr(i.deepspeech, 'lm_beta', None),
-                #TODO colocar caminho do arquivo csv no json - sai aqui
             ),
-            beam_width=getattr(i.deepspeech, 'beam_width', None),
+            beam_width=getattr(i.deepspeech, 'beam_width', None), #TODO colocar caminho do arquivo csv no json - sai aqui
+            csv=getattr(i.deepspeech, 'csv', None),
         )),
     )
     ds = rx.merge(ds_stt, ds_arg)

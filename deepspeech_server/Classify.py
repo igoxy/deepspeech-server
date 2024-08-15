@@ -34,7 +34,9 @@ class Classify:
 
     def __generate_phrases_tensor(self, phrases):
         ''' Generate tensor from phrases '''
-        return self.model.encode(phrases, convert_to_tensor=True)
+        tensors = self.model.encode(phrases, convert_to_tensor=True)
+        print(f'LOG --- Quantidade de frases-tensores: {len(tensors)}')
+        return tensors 
     
 
     def generate_tensor(self, phrase):
@@ -45,7 +47,7 @@ class Classify:
     def find_more_similar(self, phrase):
         ''' Find the sentence with the greatest similarity within the set '''
         phrase_tensor = self.generate_tensor(phrase)        # Tensor for the phrase
-        similarities = util.pytorch_cos_sim(phrase, self.phrases_tensors)
+        similarities = util.pytorch_cos_sim(phrase_tensor, self.phrases_tensors)
         idx_most_similar = np.argmax(similarities)
         
         sentence = self.phrases[idx_most_similar]           # Most similar sentence
