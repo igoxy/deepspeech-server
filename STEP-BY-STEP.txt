@@ -1,6 +1,6 @@
-Instalação (ambiente virtual):
+Instalação (ambiente virtual - python 3.6):
 
->Instalar primeiro o deepspeech-server via setup.py
+>Instalar primeiro o deepspeech-server via setup.py: python3 setup.py install
 
 > Instalar o sentence-transformers: pip3 install sentence-transformers
 
@@ -15,3 +15,8 @@ Instalação (ambiente virtual):
 Execução:
 * Na mesma pasta com o arquivo de configuração json
 > deepspeech-server --config config.json
+
+
+# TODO - ADICIONAR O ARQUIVO CONFIG AJUSTADO (lm_alpha e lm_beta)
+# TODO - ADICIONAR UM MODELO BASE AO REPOSITÓRIO
+# TODO - DICIONAR ARQUIVO CSV DE SENTENÇAS AO REPOSITÓRIO
