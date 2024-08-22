@@ -2,12 +2,6 @@
 DeepSpeech Server
 ==================
 
-.. image:: https://travis-ci.org/MainRo/deepspeech-server.svg?branch=master
-    :target: https://travis-ci.org/MainRo/deepspeech-server
-
-.. image:: https://badge.fury.io/py/deepspeech-server.svg
-    :target: https://badge.fury.io/py/deepspeech-server
-
 Key Features
 ============
 
