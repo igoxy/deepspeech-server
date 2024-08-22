@@ -1,3 +1,5 @@
+criando o venv no vscode
+
 Instalação (ambiente virtual - python 3.6):
 
 >Instalar primeiro o deepspeech-server via setup.py: python3 setup.py install
